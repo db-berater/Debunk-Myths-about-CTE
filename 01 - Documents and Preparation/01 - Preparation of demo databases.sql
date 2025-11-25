@@ -1,26 +1,17 @@
 /*
 	============================================================================
-	File:		0001 - Preparation of demo databases.sql
+	File:		01 - Preparation of demo databases.sql
 
 	Summary:	This script restores the database ERP_Demo from
 				the backup medium for distribution of data.
 				
-				THIS SCRIPT IS PART OF THE TRACK: "Workshop - Making Bad Codes better"
+				THIS SCRIPT IS PART OF THE TRACK:
+					"Debunk Myths About CTE"
 
-	Date:		October 2024
-	Revion:		November 2024
+	Date:		October 2025
+	Revion:		November 2025
 
 	SQL Server Version: >= 2016
-	------------------------------------------------------------------------------
-	Written by Uwe Ricken, db Berater GmbH
-
-	This script is intended only as a supplement to demos and lectures
-	given by Uwe Ricken.  
-  
-	THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF 
-	ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED 
-	TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-	PARTICULAR PURPOSE.
 	============================================================================
 */
 USE master;
@@ -39,4 +30,24 @@ GO
 
 SELECT * FROM ERP_Demo.dbo.get_database_help_info();
 SELECT * FROM ERP_Demo.dbo.get_object_help_info(NULL);
+GO
+
+EXEC sp_configure N'cost threshold for parallelism', 50;
+RECONFIGURE WITH OVERRIDE;
+GO
+
+USE ERP_Demo;
+GO
+
+/* disable the query store */
+EXEC dbo.sp_deactivate_query_store;
+GO
+
+/* create all necessary indexes for the demos */
+EXEC dbo.sp_create_indexes_regions;
+EXEC dbo.sp_create_indexes_nations;
+EXEC dbo.sp_create_indexes_customers;
+EXEC dbo.sp_create_indexes_orders;
+EXEC dbo.sp_create_indexes_lineitems;
+EXEC dbo.sp_create_indexes_parts;
 GO

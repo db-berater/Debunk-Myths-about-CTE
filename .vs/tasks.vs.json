@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-Debunk Myths about CTE",
+      "appliesTo": "/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-06 - JOIN - SEMIJOIN - ANTISEMIJOIN",
+      "appliesTo": "02 - Core concepts of optimization/06 - JOIN - SEMIJOIN - ANTISEMIJOIN.sql",
+      "type": "launch"
+    }
+  ]
+}
