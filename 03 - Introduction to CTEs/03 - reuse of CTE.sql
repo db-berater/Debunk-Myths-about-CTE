@@ -25,6 +25,9 @@ GO
 	Another usage for CTE is the filtering for a specific number of rows
 	What day of the week did we have the most orders?
 */
+SET STATISTICS IO, TIME ON;
+GO
+
 ;WITH l
 AS
 (

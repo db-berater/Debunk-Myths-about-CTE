@@ -1,2 +1,1 @@
-
-If we use TOP clause within a cte it moves the Sort operator to the earlier phase in the plan and hence improve performance, haven not tested it on subqueries though :-)
+07 - When CTEs slow down your queries
