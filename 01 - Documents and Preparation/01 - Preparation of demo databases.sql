@@ -18,36 +18,26 @@ USE master;
 GO
 
 /*
+	for better analysis of execution plans we overwrite the
+	default settings for
+
+	- parallelism (MAXDOP):	4
+	- cost threshold:		50
+*/
+EXEC sp_configure N'max degree of parallelism', 4;
+EXEC sp_configure N'cost threshold for parallelism', 50;
+RECONFIGURE WITH OVERRIDE;
+GO
+
+/*
 	Make sure you've executed the script 0000 - sp_restore_erp_demo.sql
 	before you run this code!
 */
 EXEC dbo.sp_restore_ERP_demo @query_store = 1;
 GO
 
-/* reset the sql server default settings for the demos */
-EXEC ERP_Demo.dbo.sp_set_sql_server_defaults;
-GO
-
 SELECT * FROM ERP_Demo.dbo.get_database_help_info();
 SELECT * FROM ERP_Demo.dbo.get_object_help_info(NULL);
 GO
 
-EXEC sp_configure N'cost threshold for parallelism', 50;
-RECONFIGURE WITH OVERRIDE;
-GO
-
-USE ERP_Demo;
-GO
-
-/* disable the query store */
-EXEC dbo.sp_deactivate_query_store;
-GO
-
-/* create all necessary indexes for the demos */
-EXEC dbo.sp_create_indexes_regions;
-EXEC dbo.sp_create_indexes_nations;
-EXEC dbo.sp_create_indexes_customers;
-EXEC dbo.sp_create_indexes_orders;
-EXEC dbo.sp_create_indexes_lineitems;
-EXEC dbo.sp_create_indexes_parts;
-GO
+ALTER DATABASE ERP_Demo SET COMPATIBILITY_LEVEL = 170;

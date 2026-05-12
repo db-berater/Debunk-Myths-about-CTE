@@ -1,1 +1,59 @@
 07 - When CTEs slow down your queries
+- Hinweis auf CTE, die Inlining unterbinden!!!
+
+- Folie 5: Bedingung: EUROPE
+
+https://www.meetup.com/de-de/pass-rg-hannover-meetup/events/312115984/?eventOrigin=group_upcoming_events
+
+
+
+USE ERP_Demo;
+GO
+
+WITH customer_order_summary AS
+(
+	SELECT	c.c_custkey,
+			c.c_name,
+			COUNT(*) AS order_count,
+			AVG(CAST(o.o_totalprice AS FLOAT)) AS avg_order_value
+	FROM	dbo.customers AS c
+			INNER JOIN dbo.orders AS o
+			ON c.c_custkey = o.o_custkey
+	GROUP BY c.c_custkey, c.c_name
+)
+SELECT	c_custkey,
+		c_name,
+		order_count,
+		avg_order_value
+FROM	customer_order_summary
+WHERE	order_count > 5
+ORDER BY order_count DESC;
+GO
+
+WITH order_summary AS
+(
+	SELECT	o_custkey,
+			COUNT(*) AS order_count,
+			SUM(o_totalprice) AS total_spent
+	FROM	dbo.orders
+	GROUP BY o_custkey
+),
+customer_ranking AS
+(
+	SELECT	c.c_custkey,
+			c.c_name,
+			os.order_count,
+			os.total_spent,
+			RANK() OVER (ORDER BY os.total_spent DESC) AS spending_rank
+	FROM	dbo.customers AS c
+			INNER JOIN order_summary AS os
+			ON c.c_custkey = os.o_custkey
+)
+SELECT	c_custkey,
+		c_name,
+		order_count,
+		total_spent,
+		spending_rank
+FROM	customer_ranking
+WHERE	spending_rank <= 20
+ORDER BY spending_rank;

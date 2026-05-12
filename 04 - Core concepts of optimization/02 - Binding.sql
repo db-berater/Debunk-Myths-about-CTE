@@ -29,7 +29,8 @@ FROM	dbo.customers AS c
 		INNER JOIN dbo.regions AS r
 		ON (n.n_regionkey = r.r_regionkey)
 WHERE	c.c_mktsegment = 'AUTOMOBILE'
-		AND n.n_name = 'Slovenia';
+		AND n.n_name = 'Slovenia'
+		AND r.r_name = 'Europe';
 GO
 
 /* What is going up behind the scene? */
@@ -42,6 +43,7 @@ FROM	dbo.customers AS c
 		ON (n.n_regionkey = r.r_regionkey)
 WHERE	c.c_mktsegment = 'AUTOMOBILE'
 		AND n.n_name = 'Slovenia'
+		AND r.r_name = 'Europe'
 OPTION	(
 			RECOMPILE,
 			QUERYTRACEON 3604,	/* output to application */

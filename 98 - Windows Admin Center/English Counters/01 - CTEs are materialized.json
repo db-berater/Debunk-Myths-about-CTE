@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "workspace":
+    {
+        "name": "Debunk Myths about CTE - materialization",
+        "created": "2025-10-10T00:00:00.000Z",
+        "modified": "2025-11-24T00:00:00.000Z",
+        "timeRange": "FifteenMinutes",
+        "isCluster": false
+    },
+    "counters":
+	[
+        {
+            "object": "Logischer Datenträger",
+            "instances":
+			[
+                {"instanceName": "T:"}
+            ],
+            "counters":
+			[
+                "Bytes written/s",
+                "Bytes read/s",
+                "Reads/s"
+            ],
+            "type": "Line"
+        },
+        {
+            "object": "System",
+            "counters":
+            [
+                "Processor Queue Length"
+            ],
+            "type": "Line"
+        }
+   ]
+}

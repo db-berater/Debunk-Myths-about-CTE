@@ -30,7 +30,26 @@ FROM	dbo.customers AS c
 		INNER JOIN dbo.regions AS r
 		ON (n.n_regionkey = r.r_regionkey)
 WHERE	c.c_mktsegment = 'AUTOMOBILE'
-		AND n.n_name = 'Slovenia';
+		AND n.n_name = 'Slovenia'
+		AND r.r_name = 'Europe'
+OPTION	(QUERYTRACEON 9130);
+GO
+
+/* run this query with actual execution plan! */
+SELECT	c.c_custkey,
+		c.c_name
+FROM	dbo.customers AS c
+		INNER JOIN dbo.nations AS n
+		ON (c.c_nationkey = n.n_nationkey)
+		INNER JOIN dbo.regions AS r
+		ON (n.n_regionkey = r.r_regionkey)
+WHERE	c.c_mktsegment = 'AUTOMOBILE'
+		AND n.n_name = 'Slovenia'
+		AND r.r_name = 'Europe'
+OPTION	(
+			FORCE ORDER,
+			QUERYTRACEON 9130
+		);
 GO
 
 /* What is going up behind the scene? */
@@ -43,6 +62,7 @@ FROM	dbo.customers AS c
 		ON (n.n_regionkey = r.r_regionkey)
 WHERE	c.c_mktsegment = 'AUTOMOBILE'
 		AND n.n_name = 'Slovenia'
+		AND r.r_name = 'Europe'
 OPTION	(
 			RECOMPILE,
 			QUERYTRACEON 3604,	/* output to application */

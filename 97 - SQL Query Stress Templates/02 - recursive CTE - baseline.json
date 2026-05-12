@@ -1,0 +1,52 @@
+{
+		"CollectIoStats":true,
+		"CollectTimeStats":true,
+		"CommandTimeout":0,
+		"ConnectionTimeout":15,
+		"DelayBetweenQueries":0,
+		"EnableConnectionPooling":true,
+		"ForceDataRetrieval":false,
+		"KillQueriesOnCancel":true,
+		"MainDbConnectionInfo":
+		{
+				"AdditionalParameters":"",
+				"ApplicationIntent":0,
+				"AzureMFA":false,
+				"ConnectTimeout":15,
+				"Database":"ERP_Demo",
+				"EnablePooling":true,
+				"EncryptOption":"True",
+				"IntegratedAuth":true,
+				"Login":"",
+				"MaxPoolSize":2,
+				"Password":"",
+				"Server":"SQLServer",
+				"TrustServerCertificate":true
+		},
+		"MainQuery":"DECLARE\t@t TABLE (o_orderdate DATE PRIMARY KEY CLUSTERED);\r\nWHILE @start_date < @finish_date\r\nBEGIN\r\n\tINSERT INTO @t (o_orderdate)\r\n\tSELECT\t@start_date;\r\n\r\n\tSET\t@start_date = DATEADD(DAY, 1, @start_date);\r\nEND;\r\n\r\nSELECT\tt.o_orderdate,\r\n\t\tCOUNT_BIG(o.o_orderkey)\tAS\tnum_orders\r\nFROM\t@t AS t\r\n\t\tLEFT JOIN demo.orders AS o\r\n\t\tON (t.o_orderdate = o.o_orderdate)\r\nGROUP BY\r\n\t\tt.o_orderdate\r\nORDER BY\r\n\t\tt.o_orderdate;",
+		"NumIterations":1000,
+		"NumThreads":1,
+		"ParamDbConnectionInfo":
+		{
+				"AdditionalParameters":"",
+				"ApplicationIntent":0,
+				"AzureMFA":false,
+				"ConnectTimeout":0,
+				"Database":"",
+				"EnablePooling":true,
+				"EncryptOption":"False",
+				"IntegratedAuth":true,
+				"Login":"",
+				"MaxPoolSize":0,
+				"Password":"",
+				"Server":"(local)",
+				"TrustServerCertificate":false
+		},
+		"ParamMappings":
+		[
+				{"Key":"@start_date","Value":"start_date"},
+				{"Key":"@finish_date","Value":"finish_date"}
+		],
+		"ParamQuery":"SELECT\tCAST('2019-04-01' AS DATE) AS start_date,\r\n\t\tCAST('2019-04-10' AS DATE) AS finish_date;",
+		"ShareDbSettings":true
+}

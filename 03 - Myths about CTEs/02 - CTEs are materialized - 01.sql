@@ -1,10 +1,9 @@
 /*
 	============================================================================
-	File:		02 - CTEs improve performance.sql
+	File:		02 - CTEs are materialized - 01.sql
 
-	Summary:	A common misconception about CTEs is that they only use the
-				objects they address once. This is completely false.
-				A CTE is executed again with EVERY invocation.
+	Summary:	A common misconception about CTEs is that they are materialized
+				in Microsoft SQL Server. This is not true.
 
 				THIS SCRIPT IS PART OF THE TRACK:
 					"Debunk Myths About CTE"
@@ -55,10 +54,12 @@ AS
 	SELECT	MIN(p.p_retailprice)	AS	min_retail_price
 	FROM	p
 )
-SELECT	*
-FROM	num_recs,
-		max_price,
-		min_price;
+SELECT	num_recs.num_articles,
+        max_price.max_retail_price,
+        min_price.min_retail_price
+FROM	num_recs
+		CROSS JOIN max_price
+		CROSS JOIN min_price;
 GO
 
 CREATE OR ALTER PROCEDURE dbo.get_article_information_default
@@ -72,7 +73,6 @@ BEGIN
 			MIN(p.p_retailprice)	AS	min_retailprice
 	FROM	dbo.parts AS p
 	WHERE	p.p_brand = @p_brand
-	OPTION	(RECOMPILE, MAXDOP 4);
 END
 GO
 
@@ -108,12 +108,20 @@ BEGIN
 		SELECT	MIN(p.p_retailprice)	AS	min_retail_price
 		FROM	p
 	)
-	SELECT	*
-	FROM	num_recs,
-			max_price,
-			min_price;
+	SELECT	num_recs.num_articles,
+			max_price.max_retail_price,
+			min_price.min_retail_price
+	FROM	num_recs
+			CROSS JOIN max_price
+			CROSS JOIN min_price;
 END
 GO
 
+
 EXEC dbo.sp_clear_query_store;
+GO
+
+EXEC dbo.get_article_information_default 'brand#23';
+GO
+EXEC dbo.get_article_information_cte 'brand#23';
 GO

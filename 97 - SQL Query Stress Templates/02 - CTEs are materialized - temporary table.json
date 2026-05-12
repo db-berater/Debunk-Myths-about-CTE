@@ -23,7 +23,7 @@
 				"Server":"SQLServer",
 				"TrustServerCertificate":true
 		},
-		"MainQuery":"EXEC dbo.get_article_information_default\r\n\t\t@p_brand = 'Brand#23';",
+		"MainQuery":"EXEC dbo.get_num_orders_tmp_table\r\n\t@o_orderdate_begin = '2019-01-01', \r\n\t@o_orderdate_end = '2019-12-31',\r\n\t@brand_name = 'Brand#23';",
 		"NumIterations":5,
 		"NumThreads":1,
 		"ParamDbConnectionInfo":
